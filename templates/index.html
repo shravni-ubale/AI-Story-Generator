@@ -5,140 +5,243 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Story Generator</title>
     <style>
-        /* General Reset */
+        :root {
+            --bg: #FAF6F1;
+            --text: #4A3C31;
+            --border: #E5D5C5;
+            --primary: #8B7355;
+            --input-bg: #FFFFFF;
+            --font: "Times New Roman", Times, serif;
+            --input-height: 70px;  /* Increased more */
+            --container-width: 700px;  /* Reduced from 900px */
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: var(--font);
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(to bottom, #d4f0ff 50%, #fef6e4 50%);
+            line-height: 1.8;
+            color: var(--text);
+            background: var(--bg);
+            min-height: 100vh;
+            padding: 2rem;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
-            overflow: hidden;
+        }
+
+        .container {
+            width: var(--container-width);
+            max-width: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         h1 {
-            font-size: 42px;
-            color: #2c3e50;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            font-weight: 700;
-            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+            font-size: 4rem;  /* Increased from 3rem */
+            color: var(--text);
+            margin-bottom: 3rem;
+            text-align: center;
+            font-weight: normal;
+            width: 100%;
         }
 
-        form {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            max-width: 420px;
+        .input-form {
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 3rem;
+            margin-bottom: 2.5rem;
             width: 100%;
-            border: 1px solid #bcd4e6;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
         }
 
         label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #34495e;
-            font-size: 16px;
+            margin-bottom: 1rem;
+            color: var(--text);
+            font-size: 1.8rem;  /* Increased from 1.4rem */
         }
 
         input {
             width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-            border: 1px solid #bcd4e6;
-            border-radius: 10px;
-            font-size: 16px;
-            background: #ecf6fc;
-            color: #2c3e50;
+            height: var(--input-height);
+            padding: 0 1.5rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1.6rem;  /* Increased from 1.3rem */
+            background: var(--input-bg);
+            color: var(--text);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
         }
 
         button {
-            background: linear-gradient(45deg, #2980b9, #6dd5fa);
-            color: #fff;
-            padding: 12px 25px;
+            background: var(--primary);
+            color: white;
+            padding: 1.2rem 2.5rem;  /* Increased padding */
             border: none;
-            border-radius: 12px;
+            border-radius: 8px;
+            font-size: 1.6rem;  /* Increased from 1.3rem */
             cursor: pointer;
-            font-size: 18px;
-            font-weight: bold;
-            transition: background 0.3s ease;
+            margin-top: 2rem;
         }
 
-        button:hover {
-            background: linear-gradient(45deg, #6dd5fa, #2980b9);
-        }
-
-        h2 {
-            margin-top: 20px;
-            color: #2c3e50;
-            font-weight: bold;
-            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        pre {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 20px;
-            border-radius: 14px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-            color: #2c3e50;
-            font-size: 16px;
-            max-width: 620px;
+        .story-container {
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 3rem;
+            min-height: 400px;  /* Reduced from 500px */
             width: 100%;
-            border: 1px solid #bcd4e6;
         }
 
-        footer {
-            margin-top: 20px;
-            font-size: 14px;
-            color: #2c3e50;
+        .typing-indicator {
+            display: none;
+            padding: 1.25rem;
+            background: var(--bg);
+            border-radius: 8px;
+            margin-bottom: 1.25rem;
+        }
+
+        .typing-indicator span {
+            display: inline-block;
+            width: 12px;  /* Increased slightly */
+            height: 12px;  /* Increased slightly */
+            background: var(--primary);
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: typing 1s infinite;
+        }
+
+        @keyframes typing {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+        #story-output {
+            font-size: 1.8rem;  /* Increased from 1.4rem */
+            line-height: 2;
+            color: var(--text);
+            white-space: pre-wrap;
+        }
+
+        ::placeholder {
+            color: #BDB19C;
+            opacity: 0.8;
+            font-size: 1.6rem;  /* Increased from 1.3rem */
+        }
+
+        @media (min-width: 1200px) {
+            :root {
+                --container-width: 800px;  /* Reduced from 1000px */
+            }
+        }
+
+        @media (min-width: 1600px) {
+            :root {
+                --container-width: 900px;  /* Reduced from 1200px */
+            }
         }
     </style>
 </head>
 <body>
-    <h1>StoryTeller</h1>
-    <form id="storyForm">
-        <label for="character">Character:</label>
-        <input type="text" id="character" name="character" placeholder="Enter a character" required>
+    <div class="container">
+        <h1>Story Generator</h1>
 
-        <label for="setting">Setting:</label>
-        <input type="text" id="setting" name="setting" placeholder="Enter a setting" required>
+        <div class="input-form">
+            <form id="story-form">
+                <div class="form-group">
+                    <label for="character">Character</label>
+                    <input type="text" id="character" name="character" placeholder="Enter a character" required>
+                </div>
 
-        <label for="theme">Theme:</label>
-        <input type="text" id="theme" name="theme" placeholder="Enter a theme" required>
+                <div class="form-group">
+                    <label for="setting">Setting</label>
+                    <input type="text" id="setting" name="setting" placeholder="Enter a setting" required>
+                </div>
 
-        <button type="submit">Generate Story</button>
-    </form>
+                <div class="form-group">
+                    <label for="theme">Theme</label>
+                    <input type="text" id="theme" name="theme" placeholder="Enter a theme" required>
+                </div>
 
-    <h2>Your Story:</h2>
-    <pre id="storyOutput">Your story will appear here...</pre>
+                <button type="submit" id="submit-btn">Generate Story</button>
+            </form>
+        </div>
 
-    <footer>
-        &copy; 2025 Story Generator. Designed with ❤️.
-    </footer>
+        <div class="story-container">
+            <div class="typing-indicator" id="typing-indicator">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div id="story-output"></div>
+        </div>
+    </div>
 
     <script>
-        document.getElementById('storyForm').addEventListener('submit', async function (e) {
+        document.getElementById('story-form').addEventListener('submit', async function(e) {
             e.preventDefault();
-            const formData = new FormData(e.target);
-            const response = await fetch('/process', {
-                method: 'POST',
-                body: formData
-            });
-            const data = await response.json();
-            document.getElementById('storyOutput').textContent = data.story;
+
+            const form = e.target;
+            const submitBtn = document.getElementById('submit-btn');
+            const typingIndicator = document.getElementById('typing-indicator');
+            const storyOutput = document.getElementById('story-output');
+
+            // Reset and show loading state
+            storyOutput.textContent = '';
+            submitBtn.disabled = true;
+            typingIndicator.style.display = 'block';
+
+            try {
+                const formData = new FormData(form);
+                const response = await fetch('/process', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to generate story. Please try again.');
+                }
+
+                const data = await response.json();
+
+                // Simulate typing effect
+                let i = 0;
+                const text = data.story;
+                function typeWriter() {
+                    if (i < text.length) {
+                        storyOutput.textContent += text.charAt(i);
+                        i++;
+                        setTimeout(typeWriter, 20);
+                    }
+                }
+
+                typingIndicator.style.display = 'none';
+                typeWriter();
+
+            } catch (error) {
+                storyOutput.textContent = 'Error: ' + error.message;
+            } finally {
+                submitBtn.disabled = false;
+            }
         });
     </script>
 </body>
 </html>
-
