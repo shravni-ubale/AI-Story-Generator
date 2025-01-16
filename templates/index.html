@@ -32,33 +32,29 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
         }
 
         .container {
             width: var(--container-width);
             max-width: 100%;
             margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 2rem;
             color: var(--text);
             margin-bottom: 2rem;
             text-align: center;
             font-weight: normal;
-            width: 100%;
         }
 
         .input-form {
             background: var(--input-bg);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 2rem;
+            padding: 2.5rem;
             margin-bottom: 2rem;
-            width: 100%;
         }
 
         .form-group {
@@ -67,9 +63,9 @@
 
         label {
             display: block;
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.75rem;
             color: var(--text);
-            font-size: 1.2rem;
+            font-size: 1.1rem;
         }
 
         input {
@@ -78,7 +74,7 @@
             padding: 0 1rem;
             border: 1px solid var(--border);
             border-radius: 8px;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             background: var(--input-bg);
             color: var(--text);
         }
@@ -91,26 +87,52 @@
         button {
             background: var(--primary);
             color: white;
-            padding: 1rem 2rem;
+            padding: 0.8rem 1.5rem;
             border: none;
-            border-radius: 8px;
-            font-size: 1.2rem;
+            border-radius: 6px;
+            font-size: 1.1rem;
             cursor: pointer;
-            margin-top: 1.5rem;
+            margin-top: 1rem;
         }
 
         .story-container {
             background: var(--input-bg);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 2rem;
-            min-height: 300px;
+            padding: 2.5rem;
+            min-height: 500px;
             width: 100%;
         }
 
+        .typing-indicator {
+            display: none;
+            padding: 1rem;
+            background: var(--bg);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .typing-indicator span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            margin-right: 5px;
+            animation: typing 1s infinite;
+        }
+
+        @keyframes typing {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
         #story-output {
             font-size: 1.2rem;
-            line-height: 1.5;
+            line-height: 1.8;
             color: var(--text);
             white-space: pre-wrap;
         }
@@ -118,7 +140,18 @@
         ::placeholder {
             color: #BDB19C;
             opacity: 0.8;
-            font-size: 1.2rem;
+        }
+
+        @media (min-width: 1200px) {
+            :root {
+                --container-width: 1000px;
+            }
+        }
+
+        @media (min-width: 1600px) {
+            :root {
+                --container-width: 1200px;
+            }
         }
     </style>
 </head>
@@ -148,12 +181,62 @@
         </div>
 
         <div class="story-container">
-            <div id="story-output">Your story will appear here...</div>
+            <div class="typing-indicator" id="typing-indicator">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div id="story-output"></div>
         </div>
     </div>
 
     <script>
-        // JavaScript remains unchanged.
+        document.getElementById('story-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const form = e.target;
+            const submitBtn = document.getElementById('submit-btn');
+            const typingIndicator = document.getElementById('typing-indicator');
+            const storyOutput = document.getElementById('story-output');
+
+            // Reset and show loading state
+            storyOutput.textContent = '';
+            submitBtn.disabled = true;
+            typingIndicator.style.display = 'block';
+
+            try {
+                const formData = new FormData(form);
+                const response = await fetch('/process', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to generate story. Please try again.');
+                }
+
+                const data = await response.json();
+
+                // Simulate typing effect
+                let i = 0;
+                const text = data.story;
+                function typeWriter() {
+                    if (i < text.length) {
+                        storyOutput.textContent += text.charAt(i);
+                        i++;
+                        setTimeout(typeWriter, 20);
+                    }
+                }
+
+                typingIndicator.style.display = 'none';
+                typeWriter();
+
+            } catch (error) {
+                storyOutput.textContent = 'Error: ' + error.message;
+            } finally {
+                submitBtn.disabled = false;
+            }
+        });
     </script>
 </body>
 </html>

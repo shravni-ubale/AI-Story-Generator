@@ -11,11 +11,16 @@ app = Flask(__name__)
 
 # Get API key from environment variables
 GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
-genai.configure(api_key=GOOGLE_API_KEY)
+if not GOOGLE_API_KEY:
+    raise EnvironmentError("GOOGLE_API_KEY is not set in the environment variables.")
 
-# Initialize the model
-model = genai.GenerativeModel('gemini-pro')
-chat = model.start_chat(history=[])
+# Configure Gemini API
+try:
+    genai.configure(api_key=GOOGLE_API_KEY)
+    model = genai.GenerativeModel('gemini-pro')
+    chat = model.start_chat(history=[])
+except Exception as api_error:
+    raise RuntimeError(f"Failed to configure Gemini API: {api_error}")
 
 # Route to render the frontend
 @app.route('/')
@@ -26,16 +31,21 @@ def home():
 @app.route('/process', methods=['POST'])
 def process():
     try:
-        # Get the form data
-        character = request.form['character']
-        setting = request.form['setting']
-        theme = request.form['theme']
+        # Validate form inputs
+        character = request.form.get('character')
+        setting = request.form.get('setting')
+        theme = request.form.get('theme')
+
+        if not character or not setting or not theme:
+            raise ValueError("All fields (character, setting, and theme) must be provided.")
 
         # Create a prompt for the AI
         prompt = f"Create a story with a {theme} theme featuring {character} in a {setting}."
 
         # Send the prompt to the Gemini API
         response = chat.send_message(prompt)
+        if not response or not response.text:
+            raise RuntimeError("The AI response was empty or invalid.")
 
         # Return the generated story as JSON
         result = {
@@ -46,9 +56,12 @@ def process():
         }
         return jsonify(result)
 
+    except ValueError as ve:
+        return jsonify({"error": f"Validation Error: {str(ve)}"}), 400
+    except RuntimeError as re:
+        return jsonify({"error": f"Runtime Error: {str(re)}"}), 500
     except Exception as e:
-        # Handle any errors
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": f"Unexpected Error: {str(e)}"}), 500
 
 # Run the Flask app
 if __name__ == '__main__':
