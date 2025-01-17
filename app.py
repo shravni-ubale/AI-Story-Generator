@@ -3,12 +3,11 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 import os
 
-# Load environment variables and configure API
 load_dotenv()
 GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
 genai.configure(api_key=GOOGLE_API_KEY)
 
-# Initialize the model
+
 model = genai.GenerativeModel('gemini-pro')
 chat = model.start_chat(history=[])
 
@@ -23,47 +22,46 @@ def generate_story(character, setting, theme):
         return f"Error generating story: {str(e)}"
 
 
-# Set page configuration
 st.set_page_config(
     page_title="StoryTeller",
     page_icon="📚",
     layout="centered"
 )
 
-# Custom CSS for Input Box with Gold Input Text
+
 st.markdown("""
     <style>
     .stApp {
         background-color: #013220; /* Dark emerald green base */
         background-image: linear-gradient(to bottom right, rgba(1, 50, 32, 0.9), rgba(24, 45, 40, 0.9)), 
-                          url('https://www.transparenttextures.com/patterns/dark-matter.png'); /* Subtle texture */
-        color: #e2c091 !important; /* Gold-like text for all */
+                          url('https://www.transparenttextures.com/patterns/dark-matter.png'); 
+        color: #e2c091 !important; 
     }
     h1, h2, h3, h4, h5, h6, .stMarkdown, footer {
         font-family: 'Times New Roman', serif;
         color: #e2c091 !important;
     }
     h1 {
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Classy shadow effect */
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     }
     .stTextInput>div>div {
-        background-color: rgba(40, 80, 60, 0.9); /* Lighter emerald input background */
-        border: 2px solid #e2c091; /* Gold border */
+        background-color: rgba(40, 80, 60, 0.9); 
+        border: 2px solid #e2c091;
         border-radius: 8px;
-        color: #e2c091 !important; /* Input text in gold */
+        color: #e2c091 !important;
     }
     .stTextInput>div>div input {
-        color: #e2c091 !important; /* Gold text while typing */
+        color: #e2c091 !important;
     }
     .stTextInput>div>div:focus-within {
-        border-color: #c9a15b; /* Active input border */
+        border-color: #c9a15b;
     }
     label {
-        color: #e2c091 !important; /* Gold-like text */
+        color: #e2c091 !important;
     }
     .stButton>button {
-        background-color: #013220; /* Emerald green button */
-        color: #e2c091 !important; /* Gold text */
+        background-color: #013220;
+        color: #e2c091 !important;
         border: 2px solid #e2c091;
         border-radius: 8px;
         font-weight: bold;
@@ -71,10 +69,10 @@ st.markdown("""
         transition: 0.3s ease-in-out;
     }
     .stButton>button:hover {
-        background-color: #024d30; /* Lighter green on hover */
+        background-color: #024d30;
         border-color: #c9a15b;
         transform: translateY(-2px);
-        box-shadow: 0 8px 15px rgba(201, 161, 91, 0.3); /* Subtle gold shadow */
+        box-shadow: 0 8px 15px rgba(201, 161, 91, 0.3);
     }
     .stAlert, .stMarkdown pre {
         background-color: #013220;
@@ -86,22 +84,21 @@ st.markdown("""
         text-align: center;
         margin-top: 2em;
         font-size: 0.9em;
-        color: #e2c091 !important; /* Footer text in gold */
+        color: #e2c091 !important; 
     }
     input::placeholder {
-        color: #e2c091 !important; /* Gold-like placeholder text */
+        color: #e2c091 !important;
     }
     </style>
     """, unsafe_allow_html=True)
 
 
-# Add a title and description
 st.title("StoryTeller")
 st.markdown("""
     Spin the emerald threads of imagination, and let a golden tale emerge!
 """)
 
-# Inputs for character, setting, and theme
+
 col1, col2, col3 = st.columns(3)
 
 with col1:
@@ -125,7 +122,7 @@ with col3:
         key="theme"
     )
 
-# Generate the story
+
 if st.button("Generate Story"):
     if character and setting and theme:
         with st.spinner("Weaving your golden tale..."):
@@ -140,6 +137,6 @@ if st.button("Generate Story"):
     else:
         st.error("Please fill in all fields before generating a story.")
 
-# Footer
+
 st.markdown("---")
 st.markdown("<footer>Created with care by the Story Weaver.</footer>", unsafe_allow_html=True)
