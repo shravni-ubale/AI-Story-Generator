@@ -58,6 +58,3 @@
 - Export functionality for generated stories
 - Social sharing capabilities
 
----
-
-**Note**: This is the initial release of StoryTeller. Please report any issues or suggestions for improvement.
