@@ -30,12 +30,11 @@ st.set_page_config(
     layout="centered"
 )
 
-# Custom CSS for Times New Roman and vintage theme
+# Custom CSS for Times New Roman and professional theme
 st.markdown("""
     <style>
     .stApp {
-        background-image: url('https://www.transparenttextures.com/patterns/old-wall.png');
-        background-color: #fdf5e6;
+        background-color: #f9f9f9;
     }
     h1, h2, h3, h4, h5, h6, .stMarkdown, .stTextInput>div>div, footer {
         font-family: 'Times New Roman', serif;
@@ -43,11 +42,10 @@ st.markdown("""
     }
     h1 {
         color: #8b4513;
-        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
     }
     .stTextInput>div>div {
-        background-color: #f9f3e9;
-        border: 2px solid #e6d5c1;
+        background-color: #ffffff;
+        border: 2px solid #dcdcdc;
         border-radius: 8px;
     }
     .stButton>button {
@@ -55,15 +53,14 @@ st.markdown("""
         color: white;
         border-radius: 8px;
         font-weight: bold;
-        letter-spacing: 1px;
         padding: 0.8em 1.5em;
     }
     .stButton>button:hover {
         background-color: #703810;
     }
     .stAlert, .stMarkdown pre {
-        background-color: #f9f3e9;
-        border: 2px solid #e6d5c1;
+        background-color: #ffffff;
+        border: 2px solid #dcdcdc;
         border-radius: 8px;
         padding: 1em;
         color: #2c1810;
@@ -71,6 +68,7 @@ st.markdown("""
     footer {
         text-align: center;
         margin-top: 2em;
+        font-size: 0.9em;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -78,7 +76,7 @@ st.markdown("""
 # Add a title and description
 st.title("StoryTeller")
 st.markdown("""
-    Speak your story, and let the magic unfold!
+    Whisper your tale, and let the magic unfold!
 """)
 
 # Inputs for character, setting, and theme
@@ -87,19 +85,19 @@ col1, col2, col3 = st.columns(3)
 with col1:
     character = st.text_input(
         "Character",
-        placeholder="e.g., a wise old wizard"
+        placeholder="e.g., a daring explorer"
     )
 
 with col2:
     setting = st.text_input(
         "Setting",
-        placeholder="e.g., in a haunted castle"
+        placeholder="e.g., in an enchanted forest"
     )
 
 with col3:
     theme = st.text_input(
         "Theme",
-        placeholder="e.g., mystery"
+        placeholder="e.g., adventure"
     )
 
 # Generate the story
@@ -109,7 +107,7 @@ if st.button("Generate Story"):
             story = generate_story(character, setting, theme)
             st.success("Here's your story:")
             st.markdown(f"""
-                <div style="padding: 15px; background-color: #fdf5e6; border: 1px solid #e6d5c1; border-radius: 8px;">
+                <div style="padding: 15px; background-color: #ffffff; border: 1px solid #dcdcdc; border-radius: 8px;">
                 <p style="font-family: 'Times New Roman', serif; color: #2c1810;">{story}</p>
                 </div>
             """, unsafe_allow_html=True)
@@ -119,4 +117,4 @@ if st.button("Generate Story"):
 
 # Footer
 st.markdown("---")
-st.markdown("<footer>Crafted with care by the Story Weaver.</footer>", unsafe_allow_html=True)
+st.markdown("<footer>Woven with care by the Story Weaver.</footer>", unsafe_allow_html=True)
