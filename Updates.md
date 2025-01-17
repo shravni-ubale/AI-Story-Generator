@@ -1,5 +1,12 @@
 # Updates
 
+### Deployment
+- Launched production site at https://stroygen.streamlit.app/
+- Implemented secure HTTPS protocol
+- Added SSL certificate for secure connections
+- Configured automatic deployment pipeline
+- Optimized application performance for production environment
+  
 ### New Features
 - Introduced StoryTeller web application using Streamlit (Initially used Flask & HTML)
 - Implemented story generation using Google's Gemini Pro AI model
@@ -57,4 +64,6 @@
 - Additional theme options
 - Export functionality for generated stories
 - Social sharing capabilities
+
+- *Production Status**: The application is now live and accessible at https://stroygen.streamlit.app/.
 
