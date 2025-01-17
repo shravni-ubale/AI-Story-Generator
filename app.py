@@ -30,7 +30,7 @@ st.set_page_config(
     layout="centered"
 )
 
-# Custom CSS for Input Box with Lighter Background
+# Custom CSS for Input Box with Gold Input Text
 st.markdown("""
     <style>
     .stApp {
@@ -51,6 +51,9 @@ st.markdown("""
         border: 2px solid #e2c091; /* Gold border */
         border-radius: 8px;
         color: #e2c091 !important; /* Input text in gold */
+    }
+    .stTextInput>div>div input {
+        color: #e2c091 !important; /* Gold text while typing */
     }
     .stTextInput>div>div:focus-within {
         border-color: #c9a15b; /* Active input border */
