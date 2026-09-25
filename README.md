@@ -1,5 +1,5 @@
 # AI-Story-Generator
-# StoryTeller 📚
+# StoryTeller 
 
 A magical web application that generates unique stories using AI, crafted with an elegant emerald and gold theme. StoryTeller harnesses the power of Google's Gemini Pro AI to create captivating tales based on your chosen character, setting, and theme.
 
